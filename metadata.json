@@ -1,0 +1,6 @@
+{
+  "name": "Blank Project",
+  "description": "A clean slate starting point ready for development.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
