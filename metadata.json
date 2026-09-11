@@ -1,6 +1,6 @@
 {
-  "name": "Blank Project",
-  "description": "A clean slate starting point ready for development.",
+  "name": "Photo Gallery",
+  "description": "A 9-photo grid arranged in 3 rows and 3 columns with equal dimensions, placeholder images, and titles.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
