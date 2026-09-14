@@ -1,0 +1,1 @@
+- [GitHub push authentication](github-push-auth.md) — an accepted GitHub App connection may still leave the workspace HTTPS Git remote unauthenticated.
