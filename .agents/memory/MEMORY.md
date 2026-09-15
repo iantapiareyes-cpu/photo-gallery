@@ -1,2 +1,2 @@
 - [GitHub push authentication](github-push-auth.md) — an accepted GitHub App connection may still leave the workspace HTTPS Git remote unauthenticated.
-- [Replit preview ports](replit-preview-ports.md) — keep workflow wait ports, Vite ports, and `.replit` port mappings aligned at 5000 for web previews.
+- [Replit preview ports](replit-preview-ports.md) — use local port 5000 for Vite/workflows and map it to external port 80 for the Preview proxy.
