@@ -1,13 +1,27 @@
-# photo-gallery
+# Photo Gallery
 
-Author: Ian Tapia Reyes
+A React and TypeScript photo gallery with a responsive 3×3 image grid.
 
-## Run on Replit
+## Getting started
 
-Use the **Start application** workflow, or run:
+Install the project dependencies:
+
+```sh
+npm install
+```
+
+Start the development server:
 
 ```sh
 npm run dev
 ```
 
-The Vite development server listens on `0.0.0.0:5000` for Replit Preview.
+The app is available through Replit Preview on port `5000`.
+
+## Available scripts
+
+- `npm run dev` — start the Vite development server
+- `npm run build` — create a production build
+- `npm run lint` — run the TypeScript check
+
+No API keys or external services are required.
