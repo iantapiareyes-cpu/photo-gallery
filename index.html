@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Photo Gallery</title>
-    <meta name="description" content="A 9-photo grid arranged in 3 rows and 3 columns with equal dimensions, placeholder images, and titles." />
+    <meta name="description" content="A 3x3 photo gallery featuring an animated 3D football field background with flying spiral footballs, stadium touchdown anthem music, and full-size photo viewing." />
     <style>
       * {
         box-sizing: border-box;
@@ -14,62 +14,224 @@
 
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        background-color: #020617;
-        background-image:
-          radial-gradient(2px 2px at 24px 36px, rgba(255, 255, 255, 0.9) 45%, transparent 55%),
-          radial-gradient(1.5px 1.5px at 86px 124px, rgba(147, 197, 253, 0.85) 45%, transparent 55%),
-          radial-gradient(1px 1px at 156px 62px, rgba(191, 219, 254, 0.8) 45%, transparent 55%),
-          radial-gradient(1.5px 1.5px at 48px 178px, rgba(255, 255, 255, 0.7) 45%, transparent 55%),
-          linear-gradient(135deg, #020617 0%, #0b1d41 48%, #111827 100%);
-        background-size: 220px 220px, 300px 280px, 180px 190px, 260px 320px, 100% 100%;
-        animation: stars-drift 28s linear infinite;
+        background-color: #020d06;
+        background: radial-gradient(ellipse at 50% 0%, #0d381e 0%, #041d0f 45%, #010a05 100%);
         color: #f8fafc;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 2.5rem 1rem;
+        padding: 2.25rem 1rem;
+        position: relative;
+        overflow-x: hidden;
       }
 
-      @keyframes stars-drift {
-        0%,
-        100% {
-          background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
-        }
-
-        50% {
-          background-position: 70px 45px, -90px 60px, 45px -55px, -60px 80px, 0 0;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        body {
-          animation: none;
-        }
+      .field-canvas,
+      .stars-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
       }
 
       .gallery-wrapper {
+        position: relative;
+        z-index: 1;
         width: 100%;
-        max-width: 900px;
+        max-width: 920px;
         margin: 0 auto;
       }
 
       .gallery-header {
         text-align: center;
         margin-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
       }
 
       .gallery-header h1 {
-        font-size: 2rem;
-        font-weight: 700;
+        font-size: 2.15rem;
+        font-weight: 800;
         letter-spacing: -0.025em;
         color: #ffffff;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.2rem;
+        text-shadow: 0 2px 14px rgba(16, 185, 129, 0.4), 0 0 25px rgba(250, 204, 21, 0.2);
       }
 
       .gallery-header p {
         font-size: 0.95rem;
-        color: #94a3b8;
+        color: #a7f3d0;
+      }
+
+      /* Stadium Hype Music Controller Pill */
+      .stadium-audio-bar {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(4, 22, 12, 0.82);
+        border: 1px solid rgba(52, 211, 153, 0.35);
+        padding: 5px 14px;
+        border-radius: 9999px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6), 0 0 16px rgba(16, 185, 129, 0.2);
+        margin-top: 0.25rem;
+      }
+
+      .music-toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #ffffff;
+        border: 1px solid #34d399;
+        border-radius: 9999px;
+        padding: 6px 14px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 10px rgba(16, 185, 129, 0.4);
+        letter-spacing: 0.02em;
+      }
+
+      .music-toggle-btn:hover {
+        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.55);
+      }
+
+      .music-toggle-btn.playing {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        border-color: #6ee7b7;
+        box-shadow: 0 0 16px rgba(52, 211, 153, 0.6);
+      }
+
+      .music-toggle-btn.pulse-cue {
+        animation: musicCuePulse 2s infinite;
+      }
+
+      @keyframes musicCuePulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+        50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      }
+
+      .music-icon-wrap svg {
+        width: 13px;
+        height: 13px;
+        display: block;
+      }
+
+      .sound-wave-bars {
+        display: inline-flex;
+        align-items: flex-end;
+        gap: 2.5px;
+        height: 13px;
+      }
+
+      .sound-wave-bars span {
+        width: 2.5px;
+        background-color: #ffffff;
+        border-radius: 1px;
+        height: 3px;
+        transition: height 0.1s ease;
+      }
+
+      .sound-wave-bars.active span:nth-child(1) {
+        animation: eqBounce 0.8s ease-in-out infinite alternate;
+      }
+      .sound-wave-bars.active span:nth-child(2) {
+        animation: eqBounce 0.6s ease-in-out infinite alternate 0.15s;
+      }
+      .sound-wave-bars.active span:nth-child(3) {
+        animation: eqBounce 0.9s ease-in-out infinite alternate 0.3s;
+      }
+      .sound-wave-bars.active span:nth-child(4) {
+        animation: eqBounce 0.7s ease-in-out infinite alternate 0.2s;
+      }
+
+      @keyframes eqBounce {
+        0% { height: 3px; }
+        100% { height: 13px; }
+      }
+
+      .volume-control-wrap {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #a7f3d0;
+      }
+
+      .volume-control-wrap svg {
+        width: 14px;
+        height: 14px;
+        opacity: 0.85;
+      }
+
+      .volume-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 65px;
+        height: 4px;
+        border-radius: 2px;
+        background: rgba(52, 211, 153, 0.3);
+        outline: none;
+        cursor: pointer;
+      }
+
+      .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #34d399;
+        box-shadow: 0 0 6px rgba(52, 211, 153, 0.8);
+        cursor: pointer;
+        transition: transform 0.1s;
+      }
+
+      .volume-slider::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+      }
+
+      .throw-football-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
+        color: #fef08a;
+        border: 1px solid #f59e0b;
+        border-radius: 9999px;
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 10px rgba(245, 158, 11, 0.3);
+        white-space: nowrap;
+      }
+
+      .throw-football-btn:hover {
+        background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
+        border-color: #fde047;
+        color: #ffffff;
+        transform: translateY(-1px) scale(1.03);
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.55);
+      }
+
+      .throw-football-btn:active {
+        transform: translateY(0) scale(0.96);
+      }
+
+      .throw-football-btn svg {
+        width: 14px;
+        height: 14px;
       }
 
       /* 3 rows, 3 columns grid with equal dimensions */
@@ -82,19 +244,24 @@
       }
 
       .photo-card {
-        background-color: #1e293b;
-        border: 1px solid #334155;
+        background-color: #061910;
+        border: 1px solid #143825;
         border-radius: 12px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        cursor: pointer;
+        outline: none;
+        position: relative;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
       }
 
-      .photo-card:hover {
+      .photo-card:hover,
+      .photo-card:focus-visible {
         transform: translateY(-4px);
-        box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.5);
-        border-color: #475569;
+        box-shadow: 0 14px 30px -4px rgba(0, 0, 0, 0.9), 0 0 22px rgba(16, 185, 129, 0.45);
+        border-color: #34d399;
       }
 
       /* Equal dimension square aspect ratio for every photo container */
@@ -114,15 +281,94 @@
         transition: transform 0.3s ease;
       }
 
-      .photo-card:hover img {
-        transform: scale(1.05);
+      .photo-card:hover img,
+      .photo-card:focus-visible img {
+        transform: scale(1.06);
+      }
+
+      .card-overlay-hint {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        color: #f1f5f9;
+        font-size: 0.72rem;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        opacity: 0;
+        transform: translateY(4px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .card-overlay-hint svg {
+        width: 11px;
+        height: 11px;
+      }
+
+      .photo-card:hover .card-overlay-hint,
+      .photo-card:focus-visible .card-overlay-hint {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Empty slot styling */
+      .photo-card.empty-card {
+        border-style: dashed;
+        border-color: #1a2a5e;
+        background-color: rgba(10, 20, 53, 0.4);
+      }
+
+      .photo-card.empty-card:hover,
+      .photo-card.empty-card:focus-visible {
+        border-color: #38bdf8;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.6), 0 0 14px rgba(56, 189, 248, 0.25);
+      }
+
+      .empty-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        background-color: #060e26;
+        color: #64748b;
+      }
+
+      .empty-icon {
+        width: 36px;
+        height: 36px;
+        opacity: 0.7;
+      }
+
+      .empty-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #64748b;
+      }
+
+      .photo-title.empty-title {
+        color: #64748b;
+        font-weight: 500;
       }
 
       .photo-details {
         padding: 0.85rem 1rem;
         text-align: center;
-        background-color: #1e293b;
-        border-top: 1px solid #334155;
+        background-color: #0c183e;
+        border-top: 1px solid #1a2a5e;
       }
 
       .photo-title {
@@ -132,6 +378,191 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      /* Modal Backdrop */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(10, 15, 29, 0.82);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+      }
+
+      .modal-backdrop.open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* Modal Content Card */
+      .modal-card {
+        background-color: #091230;
+        border: 1px solid #1e3a7a;
+        border-radius: 16px;
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85), 0 0 25px rgba(30, 58, 138, 0.35);
+        transform: scale(0.94) translateY(8px);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-backdrop.open .modal-card {
+        transform: scale(1) translateY(0);
+      }
+
+      .modal-image-wrapper {
+        position: relative;
+        width: 100%;
+        background-color: #050811;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-height: 480px;
+        min-height: 250px;
+        overflow: hidden;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+      }
+
+      .modal-image-wrapper img {
+        width: 100%;
+        max-height: 480px;
+        object-fit: contain;
+        display: block;
+        background-color: #0b1120;
+      }
+
+      .modal-empty-state {
+        width: 100%;
+        height: 260px;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background-color: #090d16;
+        color: #64748b;
+      }
+
+      .modal-empty-state .empty-icon {
+        width: 48px;
+        height: 48px;
+      }
+
+      .modal-close-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #f8fafc;
+        font-size: 1.35rem;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .modal-close-btn:hover {
+        background: rgba(30, 41, 59, 1);
+        border-color: #38bdf8;
+        transform: scale(1.08);
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+        gap: 0.75rem;
+      }
+
+      .modal-counter {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #38bdf8;
+      }
+
+      .modal-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.015em;
+        margin-bottom: 1.25rem;
+      }
+
+      .modal-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid #334155;
+        padding-top: 1rem;
+        gap: 0.75rem;
+      }
+
+      .modal-nav-group {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      }
+
+      .btn-nav {
+        background-color: #0f172a;
+        color: #e2e8f0;
+        border-color: #334155;
+      }
+
+      .btn-nav:hover {
+        background-color: #334155;
+        color: #ffffff;
+        border-color: #475569;
+      }
+
+      .btn-primary {
+        background-color: #2563eb;
+        color: #ffffff;
+      }
+
+      .btn-primary:hover {
+        background-color: #1d4ed8;
       }
 
       @media (max-width: 640px) {
@@ -150,21 +581,83 @@
         .photo-title {
           font-size: 0.75rem;
         }
+
+        .card-overlay-hint {
+          display: none;
+        }
+
+        .modal-body {
+          padding: 1rem;
+        }
+
+        .modal-title {
+          font-size: 1.15rem;
+          margin-bottom: 1rem;
+        }
+
+        .modal-image-wrapper {
+          max-height: 280px;
+          min-height: 200px;
+        }
+
+        .modal-image-wrapper img {
+          max-height: 280px;
+        }
       }
     </style>
   </head>
   <body>
+    <!-- Animated 3D Football Field Background with Flying Footballs -->
+    <canvas id="field-canvas" class="field-canvas" aria-hidden="true"></canvas>
+
+    <!-- Touchdown Stadium Anthem Audio Element -->
+    <audio id="stadium-audio" src="./audio/football_touchdown_anthem.mp3" preload="auto" loop></audio>
+
     <div class="gallery-wrapper">
       <header class="gallery-header">
         <h1>Photo Gallery</h1>
-        <p>A 3&times;3 photographic collection with equal dimensions</p>
+        <p>A 3&times;3 photo collection &bull; Click any photo to view full size</p>
+
+        <!-- Stadium Music & Football Pass Control Bar -->
+        <div class="stadium-audio-bar" id="stadium-audio-bar">
+          <button type="button" class="music-toggle-btn pulse-cue" id="stadium-music-btn" aria-label="Toggle Touchdown Anthem audio">
+            <span class="music-icon-wrap" id="music-icon-wrap">
+              <svg id="music-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <svg id="music-pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+            </span>
+            <span id="music-btn-text">Touchdown Anthem</span>
+            <div class="sound-wave-bars" id="music-wave-bars" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </button>
+
+          <button type="button" class="throw-football-btn" id="throw-football-btn" aria-label="Throw a spiral football pass">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <!-- Football icon -->
+              <ellipse cx="12" cy="12" rx="10" ry="6" transform="rotate(-30 12 12)" fill="#fef08a"/>
+              <line x1="8" y1="14.3" x2="16" y2="9.7" stroke="#78350f" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="10.5" y1="11.5" x2="11.5" y2="13.2" stroke="#78350f" stroke-width="1.2"/>
+              <line x1="12.5" y1="10.3" x2="13.5" y2="12" stroke="#78350f" stroke-width="1.2"/>
+            </svg>
+            <span>Throw Spiral!</span>
+          </button>
+
+          <div class="volume-control-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            <input type="range" id="music-volume" min="0" max="1" step="0.05" value="0.75" aria-label="Stadium music volume" class="volume-slider" />
+          </div>
+        </div>
       </header>
 
-      <main class="photo-grid">
+      <main class="photo-grid" id="photo-grid">
         <!-- Row 1 / Col 1 -->
-        <div class="photo-card" id="photo-1">
+        <div class="photo-card" id="photo-1" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Sports Feature photo" data-index="0" data-title="Sports Feature" data-src="./images/usa_today_10378433.jpg">
           <div class="image-container">
             <img src="./images/usa_today_10378433.jpg" alt="Sports Feature" loading="lazy" />
+            <span class="card-overlay-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              View Photo
+            </span>
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Sports Feature</h2>
@@ -172,9 +665,13 @@
         </div>
 
         <!-- Row 1 / Col 2 -->
-        <div class="photo-card" id="photo-2">
+        <div class="photo-card" id="photo-2" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Football Action photo" data-index="1" data-title="Football Action" data-src="./images/Shadow-Ridge-Football-Dynamic-Sports-Photos_0021.jpg">
           <div class="image-container">
             <img src="./images/Shadow-Ridge-Football-Dynamic-Sports-Photos_0021.jpg" alt="Shadow Ridge Football" loading="lazy" />
+            <span class="card-overlay-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              View Photo
+            </span>
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Football Action</h2>
@@ -182,49 +679,69 @@
         </div>
 
         <!-- Row 1 / Col 3 -->
-        <div class="photo-card" id="photo-3">
+        <div class="photo-card" id="photo-3" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Athletic Performance photo" data-index="2" data-title="Athletic Performance" data-src="./images/top_row_3.jpg">
           <div class="image-container">
             <img src="./images/top_row_3.jpg" alt="Athletic Performance" loading="lazy" />
+            <span class="card-overlay-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              View Photo
+            </span>
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Athletic Performance</h2>
           </div>
         </div>
 
-        <!-- Row 2 / Col 1 -->
-        <div class="photo-card" id="photo-4">
+        <!-- Row 2 / Col 1 (Oakland Offensive Line) -->
+        <div class="photo-card" id="photo-4" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Oakland Offensive Line photo" data-index="3" data-title="Oakland Offensive Line" data-src="./images/oakland_offensive_line.jpg">
           <div class="image-container">
-            <img src="https://picsum.photos/id/29/600/600" alt="Rocky Mountain Peak" loading="lazy" />
+            <img src="./images/oakland_offensive_line.jpg" alt="Oakland offensive line - Miami Dolphins vs Oakland Raiders 2012" loading="lazy" />
+            <span class="card-overlay-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              View Photo
+            </span>
           </div>
           <div class="photo-details">
-            <h2 class="photo-title">Mountain Peak</h2>
+            <h2 class="photo-title">Oakland Offensive Line</h2>
           </div>
         </div>
 
-        <!-- Row 2 / Col 2 -->
-        <div class="photo-card" id="photo-5">
+        <!-- Row 2 / Col 2 (CBS Sports Map) -->
+        <div class="photo-card" id="photo-5" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View College Football Map photo" data-index="4" data-title="College Football Map" data-src="./images/cbs_map_story.png">
           <div class="image-container">
-            <img src="https://picsum.photos/id/42/600/600" alt="Abstract Coffee Cup" loading="lazy" />
+            <img src="./images/cbs_map_story.png" alt="College Football Map" loading="lazy" referrerpolicy="no-referrer" />
+            <span class="card-overlay-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              View Photo
+            </span>
           </div>
           <div class="photo-details">
-            <h2 class="photo-title">Morning Brew</h2>
+            <h2 class="photo-title">College Football Map</h2>
           </div>
         </div>
 
-        <!-- Row 2 / Col 3 -->
-        <div class="photo-card" id="photo-6">
+        <!-- Row 2 / Col 3 (PennLive Football Action) -->
+        <div class="photo-card" id="photo-6" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View PennLive Football Action photo" data-index="5" data-title="PennLive Football Action" data-src="./images/pennlive_football.jpg">
           <div class="image-container">
-            <img src="./images/x800-16957.jpg" alt="Batman: The Animated Series" loading="lazy" />
+            <img src="./images/pennlive_football.jpg" alt="PennLive Football Action" loading="lazy" />
+            <span class="card-overlay-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              View Photo
+            </span>
           </div>
           <div class="photo-details">
-            <h2 class="photo-title">Batman: The Animated Series</h2>
+            <h2 class="photo-title">PennLive Football Action</h2>
           </div>
         </div>
 
         <!-- Row 3 / Col 1 -->
-        <div class="photo-card" id="photo-7">
+        <div class="photo-card" id="photo-7" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Coastal Waves photo" data-index="6" data-title="Coastal Waves" data-src="./images/coastal_waves.jpg">
           <div class="image-container">
-            <img src="https://picsum.photos/id/54/600/600" alt="Coastal Waves" loading="lazy" />
+            <img src="./images/coastal_waves.jpg" alt="Coastal Waves" loading="lazy" />
+            <span class="card-overlay-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              View Photo
+            </span>
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Coastal Waves</h2>
@@ -232,9 +749,13 @@
         </div>
 
         <!-- Row 3 / Col 2 -->
-        <div class="photo-card" id="photo-8">
+        <div class="photo-card" id="photo-8" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Urban Geometry photo" data-index="7" data-title="Urban Geometry" data-src="./images/urban_geometry.jpg">
           <div class="image-container">
-            <img src="https://picsum.photos/id/57/600/600" alt="Modern Architecture" loading="lazy" />
+            <img src="./images/urban_geometry.jpg" alt="Modern Architecture" loading="lazy" />
+            <span class="card-overlay-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              View Photo
+            </span>
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Urban Geometry</h2>
@@ -242,9 +763,13 @@
         </div>
 
         <!-- Row 3 / Col 3 -->
-        <div class="photo-card" id="photo-9">
+        <div class="photo-card" id="photo-9" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Desert Dunes photo" data-index="8" data-title="Desert Dunes" data-src="./images/desert_dunes.jpg">
           <div class="image-container">
-            <img src="https://picsum.photos/id/65/600/600" alt="Golden Desert Dunes" loading="lazy" />
+            <img src="./images/desert_dunes.jpg" alt="Golden Desert Dunes" loading="lazy" />
+            <span class="card-overlay-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              View Photo
+            </span>
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Desert Dunes</h2>
@@ -252,5 +777,1128 @@
         </div>
       </main>
     </div>
+
+    <!-- Photo Detail Modal Dialog -->
+    <div id="photo-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-title">
+      <div class="modal-card" id="modal-card">
+        <div class="modal-image-wrapper">
+          <img id="modal-img" src="" alt="" />
+          <div id="modal-empty-state" class="modal-empty-state">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span class="empty-label">No Image Available</span>
+          </div>
+          <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close dialog">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-meta">
+            <span id="modal-counter" class="modal-counter">Photo 1 of 9</span>
+          </div>
+          <h2 id="modal-title" class="modal-title"></h2>
+          <div class="modal-footer">
+            <div class="modal-nav-group">
+              <button type="button" class="btn btn-nav" id="modal-prev-btn" aria-label="Previous photo">&larr; Previous</button>
+              <button type="button" class="btn btn-nav" id="modal-next-btn" aria-label="Next photo">Next &rarr;</button>
+            </div>
+            <button type="button" class="btn btn-primary" id="modal-dismiss-btn">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Animated 3D Football Field Background & Stadium Hype Music Scripts -->
+    <script>
+      // 1. 3D Football Field Perspective Animation
+      (function() {
+        const canvas = document.getElementById('field-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        let width = 0;
+        let height = 0;
+        let dpr = window.devicePixelRatio || 1;
+        let animationFrameId = null;
+        let isRunning = true;
+
+        // Smooth mouse parallax
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentMouseX = 0;
+        let currentMouseY = 0;
+
+        window.addEventListener('mousemove', function(e) {
+          mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+          mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+        }, { passive: true });
+
+        window.addEventListener('touchmove', function(e) {
+          if (e.touches && e.touches[0]) {
+            mouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+          }
+        }, { passive: true });
+
+        // Field geometry (standard football field proportions in 3D world units)
+        const YARD_LEN = 26; // world units per yard
+        const FIELD_WIDTH = 53.33 * YARD_LEN; // ~1386 units wide
+        const HALF_W = FIELD_WIDTH / 2;
+        const STRIPE_YARDS = 5; // 5-yard alternating turf bands
+        const STRIPE_LEN = STRIPE_YARDS * YARD_LEN; // 130 units
+        const CYCLE_YARDS = 100; // 100-yard regulation cycle
+        const CYCLE_LEN = CYCLE_YARDS * YARD_LEN; // 2600 units
+
+        // Camera scroll
+        let scrollZ = 0;
+        let lastTimestamp = performance.now();
+        const scrollSpeed = 68; // forward flyover speed in world units/sec
+
+        // Floating stadium motes / night turf sparks
+        const motes = [];
+        const MOTE_COUNT = 65;
+        function initMotes() {
+          motes.length = 0;
+          for (let i = 0; i < MOTE_COUNT; i++) {
+            motes.push({
+              x: (Math.random() - 0.5) * FIELD_WIDTH * 1.5,
+              y: Math.random() * 180 + 10,
+              z: Math.random() * 1400 + 80,
+              vy: -0.22 - Math.random() * 0.35,
+              radius: Math.random() * 2.2 + 1.0,
+              alpha: Math.random() * 0.5 + 0.25,
+              twinkle: Math.random() * Math.PI * 2
+            });
+          }
+        }
+
+        // -------------------------------------------------------------
+        // Flying Footballs Simulation ("Footballs Flying Everywhere")
+        // -------------------------------------------------------------
+        const footballs = [];
+        const TOTAL_FOOTBALLS = 26;
+
+        function createFootball(initial, overrideParams) {
+          const w = width || window.innerWidth || 1200;
+          const h = height || window.innerHeight || 800;
+
+          if (overrideParams) {
+            return Object.assign({
+              is3D: false,
+              x: w * 0.5,
+              y: h,
+              vx: 0,
+              vy: -500,
+              gravity: 280,
+              size: 48,
+              angle: -Math.PI * 0.35,
+              spiralPhase: 0,
+              spiralSpeed: 18,
+              trail: [],
+              alpha: 1,
+              isInteractive: true
+            }, overrideParams);
+          }
+
+          // Trajectory types:
+          // 0: Cross-field Hail Mary high arc (left-to-right or right-to-left)
+          // 1: Speed bullet pass (horizontal line-drive through mid-screen)
+          // 2: 3D stadium flyover (soaring from deep field z:1400 towards camera)
+          // 3: Downfield diagonal bomb (steep high trajectory across upper stadium sky)
+          // 4: Low sideline laser pass
+          const type = Math.floor(Math.random() * 5);
+          const dir = Math.random() > 0.5 ? 1 : -1;
+          const baseSize = 30 + Math.random() * 40; // 30px to 70px
+
+          if (type === 2) {
+            // 3D Perspective Pass from deep field toward camera
+            const zStart = initial ? (Math.random() * 1200 + 100) : (1250 + Math.random() * 300);
+            return {
+              is3D: true,
+              x: (Math.random() - 0.5) * FIELD_WIDTH * 1.1,
+              y: Math.random() * 200 + 40,
+              z: zStart,
+              vx: (Math.random() - 0.5) * 110,
+              vy: (Math.random() - 0.5) * 45,
+              vz: -(420 + Math.random() * 340), // fast flight towards camera
+              size: baseSize,
+              angle: (Math.random() - 0.5) * 0.4,
+              spiralPhase: Math.random() * Math.PI * 2,
+              spiralSpeed: 14 + Math.random() * 12,
+              trail: [],
+              alpha: 0.95
+            };
+          }
+
+          // 2D Screen-space Ballistic Passes
+          let x, y, vx, vy, gravity;
+          if (dir === 1) {
+            // Left to right
+            x = initial ? (Math.random() * w) : (-120 - Math.random() * 180);
+            vx = 220 + Math.random() * 280;
+          } else {
+            // Right to left
+            x = initial ? (Math.random() * w) : (w + 120 + Math.random() * 180);
+            vx = -(220 + Math.random() * 280);
+          }
+
+          if (type === 0 || type === 3) {
+            // High Arc Hail Mary
+            y = initial ? (Math.random() * h * 0.7) : (h * (0.55 + Math.random() * 0.35));
+            vy = -(320 + Math.random() * 260);
+            gravity = 400 + Math.random() * 180;
+          } else if (type === 1) {
+            // Bullet line-drive
+            y = Math.random() * (h * 0.8) + 40;
+            vy = (Math.random() - 0.5) * 80;
+            gravity = (Math.random() - 0.5) * 60;
+          } else {
+            // Low sideline laser
+            y = h * 0.4 + Math.random() * (h * 0.5);
+            vy = -(90 + Math.random() * 120);
+            gravity = 250 + Math.random() * 120;
+          }
+
+          return {
+            is3D: false,
+            x: x,
+            y: y,
+            vx: vx,
+            vy: vy,
+            gravity: gravity,
+            size: baseSize,
+            angle: Math.atan2(vy, vx),
+            spiralPhase: Math.random() * Math.PI * 2,
+            spiralSpeed: 12 + Math.random() * 14,
+            trail: [],
+            alpha: 0.9 + Math.random() * 0.1
+          };
+        }
+
+        function initFootballs() {
+          footballs.length = 0;
+          for (let i = 0; i < TOTAL_FOOTBALLS; i++) {
+            footballs.push(createFootball(true));
+          }
+        }
+
+        function drawRealisticFootball(ctx, x, y, length, angle, spiralPhase, alpha, trail) {
+          // 1. Aerodynamic gold/white swoosh motion trail
+          if (trail && trail.length > 1) {
+            ctx.save();
+            for (let i = 0; i < trail.length - 1; i++) {
+              const p1 = trail[i];
+              const p2 = trail[i + 1];
+              const tRatio = i / trail.length;
+              const trailAlpha = tRatio * 0.34 * alpha;
+              ctx.strokeStyle = 'rgba(250, 204, 21, ' + trailAlpha + ')';
+              ctx.lineWidth = Math.max(tRatio * (length * 0.18), 1.2);
+              ctx.lineCap = 'round';
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+            ctx.restore();
+          }
+
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(angle);
+          ctx.globalAlpha = Math.min(Math.max(alpha, 0), 1);
+
+          const L = length;
+          const W = length * 0.58;
+
+          // Ambient drop shadow beneath the ball
+          ctx.save();
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+          ctx.shadowBlur = L * 0.28;
+          ctx.shadowOffsetY = W * 0.18;
+
+          // Prolate spheroid football outline
+          ctx.beginPath();
+          ctx.moveTo(-L * 0.5, 0);
+          ctx.bezierCurveTo(-L * 0.28, -W * 0.52, L * 0.28, -W * 0.52, L * 0.5, 0);
+          ctx.bezierCurveTo(L * 0.28, W * 0.52, -L * 0.28, W * 0.52, -L * 0.5, 0);
+          ctx.closePath();
+
+          // Authentic pebbled leather gradient shading
+          const leatherGrad = ctx.createLinearGradient(0, -W * 0.5, 0, W * 0.5);
+          leatherGrad.addColorStop(0, '#c2581f'); // floodlight top highlight
+          leatherGrad.addColorStop(0.28, '#94380d'); // classic brown pigskin
+          leatherGrad.addColorStop(0.68, '#632104'); // deep leather midtone
+          leatherGrad.addColorStop(1, '#331002');   // shaded belly underside
+          ctx.fillStyle = leatherGrad;
+          ctx.fill();
+          ctx.restore();
+
+          // Clip to football interior for stripes & details
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(-L * 0.5, 0);
+          ctx.bezierCurveTo(-L * 0.28, -W * 0.52, L * 0.28, -W * 0.52, L * 0.5, 0);
+          ctx.bezierCurveTo(L * 0.28, W * 0.52, -L * 0.28, W * 0.52, -L * 0.5, 0);
+          ctx.closePath();
+          ctx.clip();
+
+          // Upper curve specular highlight
+          const sheenGrad = ctx.createLinearGradient(-L * 0.3, -W * 0.5, 0, 0);
+          sheenGrad.addColorStop(0, 'rgba(255, 230, 200, 0.38)');
+          sheenGrad.addColorStop(0.6, 'rgba(255, 255, 255, 0.04)');
+          sheenGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = sheenGrad;
+          ctx.fill();
+
+          // White collegiate / NFL stripes near each tip
+          const stripeWidth = L * 0.068;
+          const leftStripeX = -L * 0.31;
+          const rightStripeX = L * 0.31;
+
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+          ctx.fillRect(leftStripeX - stripeWidth * 0.5, -W, stripeWidth, W * 2);
+          ctx.fillRect(rightStripeX - stripeWidth * 0.5, -W, stripeWidth, W * 2);
+
+          // Subtle stripe seam indentations
+          ctx.fillStyle = 'rgba(45, 14, 3, 0.45)';
+          ctx.fillRect(leftStripeX - stripeWidth * 0.5 - 1, -W, 1.2, W * 2);
+          ctx.fillRect(leftStripeX + stripeWidth * 0.5, -W, 1.2, W * 2);
+          ctx.fillRect(rightStripeX - stripeWidth * 0.5 - 1, -W, 1.2, W * 2);
+          ctx.fillRect(rightStripeX + stripeWidth * 0.5, -W, 1.2, W * 2);
+
+          // Center leather seam
+          ctx.strokeStyle = 'rgba(40, 10, 2, 0.7)';
+          ctx.lineWidth = Math.max(L * 0.016, 0.8);
+          ctx.beginPath();
+          ctx.moveTo(-L * 0.48, 0);
+          ctx.lineTo(L * 0.48, 0);
+          ctx.stroke();
+
+          // White Laces with 3D spiral rotation effect
+          // As the football spins, the laces rotate into view and around to the back
+          const laceCycle = Math.sin(spiralPhase);
+          if (laceCycle > -0.2) {
+            const laceY = laceCycle * (W * 0.28) - (W * 0.04);
+            const laceAlpha = Math.min(Math.max((laceCycle + 0.2) / 0.5, 0), 1);
+
+            ctx.save();
+            ctx.globalAlpha = ctx.globalAlpha * laceAlpha;
+
+            // Main center lace spine
+            const spineLen = L * 0.35;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+            ctx.lineWidth = Math.max(L * 0.032, 1.4);
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(-spineLen * 0.5, laceY);
+            ctx.lineTo(spineLen * 0.5, laceY);
+            ctx.stroke();
+
+            // 8 cross-stitches / laces
+            const stitchCount = 8;
+            const stitchSpan = spineLen * 0.86;
+            const stitchH = W * 0.24 * Math.max(0.35, 1.0 - Math.abs(laceCycle) * 0.25);
+            ctx.lineWidth = Math.max(L * 0.024, 1.1);
+
+            for (let s = 0; s < stitchCount; s++) {
+              const sx = -stitchSpan * 0.5 + (s / (stitchCount - 1)) * stitchSpan;
+              // Stitch shadow
+              ctx.strokeStyle = 'rgba(25, 6, 2, 0.55)';
+              ctx.beginPath();
+              ctx.moveTo(sx, laceY - stitchH * 0.5 + 1.2);
+              ctx.lineTo(sx, laceY + stitchH * 0.5 + 1.2);
+              ctx.stroke();
+
+              // White stitch
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.98)';
+              ctx.beginPath();
+              ctx.moveTo(sx, laceY - stitchH * 0.5);
+              ctx.lineTo(sx, laceY + stitchH * 0.5);
+              ctx.stroke();
+            }
+            ctx.restore();
+          }
+
+          ctx.restore(); // unclip
+
+          // Crisp outer leather rim stroke
+          ctx.strokeStyle = 'rgba(40, 10, 2, 0.6)';
+          ctx.lineWidth = Math.max(L * 0.02, 1);
+          ctx.beginPath();
+          ctx.moveTo(-L * 0.5, 0);
+          ctx.bezierCurveTo(-L * 0.28, -W * 0.52, L * 0.28, -W * 0.52, L * 0.5, 0);
+          ctx.bezierCurveTo(L * 0.28, W * 0.52, -L * 0.28, W * 0.52, -L * 0.5, 0);
+          ctx.closePath();
+          ctx.stroke();
+
+          ctx.restore();
+        }
+
+        function resize() {
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+          width = window.innerWidth;
+          height = window.innerHeight;
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          canvas.style.width = width + 'px';
+          canvas.style.height = height + 'px';
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+          if (motes.length === 0) {
+            initMotes();
+          }
+          if (footballs.length === 0) {
+            initFootballs();
+          }
+        }
+
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(resize, 100);
+        });
+
+        // 3D Perspective projection onto 2D canvas
+        function project(x, y, z, camH, camDist, horizonX, horizonY) {
+          if (z <= 15) return null;
+          const factor = camDist / z;
+          const sx = horizonX + x * factor;
+          const sy = horizonY + (camH - y) * factor;
+          return { x: sx, y: sy, factor, z };
+        }
+
+        function render(time) {
+          if (!isRunning) return;
+
+          const dt = Math.min((time - lastTimestamp) / 1000, 0.1);
+          lastTimestamp = time;
+
+          scrollZ = (scrollZ + dt * scrollSpeed) % CYCLE_LEN;
+
+          ctx.clearRect(0, 0, width, height);
+
+          // Smooth mouse damping for cinematic parallax
+          currentMouseX += (mouseX - currentMouseX) * 0.05;
+          currentMouseY += (mouseY - currentMouseY) * 0.05;
+
+          // Perspective camera setup
+          const horizonY = height * 0.16 + currentMouseY * 18;
+          const horizonX = width * 0.5 + currentMouseX * 55;
+          const camH = 340;
+          const camDist = 380;
+          const maxZ = 1600;
+          const minZ = 75;
+
+          // --- 1. Stadium Night Sky & Floodlights ---
+          const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY + 30);
+          skyGrad.addColorStop(0, '#010804');
+          skyGrad.addColorStop(0.7, '#02180b');
+          skyGrad.addColorStop(1, '#052b14');
+          ctx.fillStyle = skyGrad;
+          ctx.fillRect(0, 0, width, horizonY + 30);
+
+          // Horizon stadium glow
+          const rimGlow = ctx.createRadialGradient(horizonX, horizonY, 10, horizonX, horizonY, width * 0.65);
+          rimGlow.addColorStop(0, 'rgba(52, 211, 153, 0.28)');
+          rimGlow.addColorStop(0.5, 'rgba(16, 185, 129, 0.08)');
+          rimGlow.addColorStop(1, 'rgba(1, 9, 4, 0)');
+          ctx.fillStyle = rimGlow;
+          ctx.fillRect(0, 0, width, horizonY + 40);
+
+          // Beat-reactive floodlight pulse
+          const audioEnergy = window.stadiumAudioEnergy || 0;
+          const floodlightPulse = audioEnergy > 0 ? (1 + audioEnergy * 0.6) : (1 + Math.sin(time * 0.003) * 0.08);
+
+          // Left floodlight beam
+          const leftTowerX = width * 0.12;
+          const leftTowerY = horizonY * 0.35;
+          const leftBeam = ctx.createRadialGradient(leftTowerX, leftTowerY, 5, leftTowerX + width * 0.2, horizonY + height * 0.4, width * 0.65);
+          leftBeam.addColorStop(0, 'rgba(255, 255, 255, ' + (0.42 * floodlightPulse) + ')');
+          leftBeam.addColorStop(0.2, 'rgba(167, 243, 208, ' + (0.24 * floodlightPulse) + ')');
+          leftBeam.addColorStop(0.6, 'rgba(16, 185, 129, ' + (0.07 * floodlightPulse) + ')');
+          leftBeam.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = leftBeam;
+          ctx.beginPath();
+          ctx.moveTo(leftTowerX, leftTowerY);
+          ctx.lineTo(width * 0.6, height);
+          ctx.lineTo(0, height);
+          ctx.lineTo(0, horizonY * 0.2);
+          ctx.closePath();
+          ctx.fill();
+
+          // Right floodlight beam
+          const rightTowerX = width * 0.88;
+          const rightTowerY = horizonY * 0.35;
+          const rightBeam = ctx.createRadialGradient(rightTowerX, rightTowerY, 5, rightTowerX - width * 0.2, horizonY + height * 0.4, width * 0.65);
+          rightBeam.addColorStop(0, 'rgba(255, 255, 255, ' + (0.42 * floodlightPulse) + ')');
+          rightBeam.addColorStop(0.2, 'rgba(167, 243, 208, ' + (0.24 * floodlightPulse) + ')');
+          rightBeam.addColorStop(0.6, 'rgba(16, 185, 129, ' + (0.07 * floodlightPulse) + ')');
+          rightBeam.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = rightBeam;
+          ctx.beginPath();
+          ctx.moveTo(rightTowerX, rightTowerY);
+          ctx.lineTo(width * 0.4, height);
+          ctx.lineTo(width, height);
+          ctx.lineTo(width, horizonY * 0.2);
+          ctx.closePath();
+          ctx.fill();
+
+          // Floodlight banks
+          function drawFloodlightBank(bx, by) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            ctx.shadowColor = '#34d399';
+            ctx.shadowBlur = 14;
+            for (let r = -1; r <= 1; r++) {
+              for (let c = -2; c <= 2; c++) {
+                ctx.fillRect(bx + c * 5 - 1.5, by + r * 4 - 1.5, 3, 3);
+              }
+            }
+            ctx.shadowBlur = 0;
+          }
+          drawFloodlightBank(leftTowerX, leftTowerY);
+          drawFloodlightBank(rightTowerX, rightTowerY);
+
+          // --- 2. 3D Football Field Turf & Markings ---
+          const startStripeIndex = Math.floor((scrollZ + minZ) / STRIPE_LEN);
+          const endStripeIndex = Math.ceil((scrollZ + maxZ) / STRIPE_LEN);
+
+          // Sideline turf apron
+          const pFarL_apron = project(-HALF_W * 1.35, 0, maxZ, camH, camDist, horizonX, horizonY);
+          const pFarR_apron = project(HALF_W * 1.35, 0, maxZ, camH, camDist, horizonX, horizonY);
+          const pNearL_apron = project(-HALF_W * 1.35, 0, minZ, camH, camDist, horizonX, horizonY);
+          const pNearR_apron = project(HALF_W * 1.35, 0, minZ, camH, camDist, horizonX, horizonY);
+
+          if (pFarL_apron && pFarR_apron && pNearL_apron && pNearR_apron) {
+            ctx.fillStyle = '#021509';
+            ctx.beginPath();
+            ctx.moveTo(pFarL_apron.x, pFarL_apron.y);
+            ctx.lineTo(pFarR_apron.x, pFarR_apron.y);
+            ctx.lineTo(pNearR_apron.x, pNearR_apron.y);
+            ctx.lineTo(pNearL_apron.x, pNearL_apron.y);
+            ctx.closePath();
+            ctx.fill();
+          }
+
+          // Alternating 5-yard turf stripes
+          for (let sIdx = endStripeIndex; sIdx >= startStripeIndex; sIdx--) {
+            const worldZ1 = sIdx * STRIPE_LEN - scrollZ;
+            const worldZ2 = (sIdx + 1) * STRIPE_LEN - scrollZ;
+
+            if (worldZ2 < minZ || worldZ1 > maxZ) continue;
+
+            const z1 = Math.max(worldZ1, minZ);
+            const z2 = Math.min(worldZ2, maxZ);
+
+            const p1L = project(-HALF_W, 0, z1, camH, camDist, horizonX, horizonY);
+            const p1R = project(HALF_W, 0, z1, camH, camDist, horizonX, horizonY);
+            const p2L = project(-HALF_W, 0, z2, camH, camDist, horizonX, horizonY);
+            const p2R = project(HALF_W, 0, z2, camH, camDist, horizonX, horizonY);
+
+            if (!p1L || !p1R || !p2L || !p2R) continue;
+
+            const isEven = (sIdx % 2 === 0);
+            ctx.fillStyle = isEven ? '#083818' : '#052911';
+            ctx.beginPath();
+            ctx.moveTo(p1L.x, p1L.y);
+            ctx.lineTo(p1R.x, p1R.y);
+            ctx.lineTo(p2R.x, p2R.y);
+            ctx.lineTo(p2L.x, p2L.y);
+            ctx.closePath();
+            ctx.fill();
+
+            // Depth atmosphere blend
+            const depthFactor = Math.min(Math.max((z1 - minZ) / (maxZ - minZ), 0), 1);
+            if (depthFactor > 0.4) {
+              ctx.fillStyle = 'rgba(3, 20, 10, ' + (depthFactor * 0.35) + ')';
+              ctx.fill();
+            }
+          }
+
+          // Yard Lines, Numbers, and Hash Marks
+          const startYard = Math.floor((scrollZ + minZ) / YARD_LEN);
+          const endYard = Math.ceil((scrollZ + maxZ) / YARD_LEN);
+
+          for (let yIdx = endYard; yIdx >= startYard; yIdx--) {
+            const worldZ = yIdx * YARD_LEN - scrollZ;
+            if (worldZ < minZ || worldZ > maxZ) continue;
+
+            const isFive = (yIdx % 5 === 0);
+            const isTen = (yIdx % 10 === 0);
+
+            const pL = project(-HALF_W, 0, worldZ, camH, camDist, horizonX, horizonY);
+            const pR = project(HALF_W, 0, worldZ, camH, camDist, horizonX, horizonY);
+
+            if (!pL || !pR) continue;
+
+            const scale = pL.factor;
+            const alpha = Math.min(Math.max(1 - (worldZ - minZ) / (maxZ - minZ * 2), 0.1), 0.95);
+
+            if (isFive || isTen) {
+              // 5 or 10-yard transverse line
+              ctx.strokeStyle = isTen ? ('rgba(255, 255, 255, ' + (alpha * 0.88) + ')') : ('rgba(220, 252, 231, ' + (alpha * 0.45) + ')');
+              ctx.lineWidth = Math.max((isTen ? 2.6 : 1.4) * scale, 0.8);
+              ctx.beginPath();
+              ctx.moveTo(pL.x, pL.y);
+              ctx.lineTo(pR.x, pR.y);
+              ctx.stroke();
+
+              // 10-Yard Numbers with directional arrows (e.g. ◀ 50 ▶, ◀ 40, 30 ▶)
+              if (isTen && scale > 0.38) {
+                const posInCycle = ((yIdx % CYCLE_YARDS) + CYCLE_YARDS) % CYCLE_YARDS;
+                let yardNumber = posInCycle;
+                let isLeftArrow = false;
+                let isRightArrow = false;
+
+                if (posInCycle > 50) {
+                  yardNumber = 100 - posInCycle;
+                  isRightArrow = true;
+                } else if (posInCycle < 50) {
+                  isLeftArrow = true;
+                }
+
+                if (yardNumber >= 10 && yardNumber <= 50) {
+                  const fontSize = Math.round(scale * 32);
+                  if (fontSize >= 8) {
+                    ctx.font = '900 ' + fontSize + 'px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'rgba(255, 255, 255, ' + (alpha * 0.85) + ')';
+
+                    // Left sideline number
+                    const pNumL = project(-HALF_W * 0.62, 0, worldZ, camH, camDist, horizonX, horizonY);
+                    if (pNumL) {
+                      const textL = isLeftArrow ? ('◀ ' + yardNumber) : (isRightArrow ? (yardNumber + ' ▶') : ('' + yardNumber));
+                      ctx.fillText(textL, pNumL.x, pNumL.y);
+                    }
+
+                    // Right sideline number
+                    const pNumR = project(HALF_W * 0.62, 0, worldZ, camH, camDist, horizonX, horizonY);
+                    if (pNumR) {
+                      const textR = isLeftArrow ? ('◀ ' + yardNumber) : (isRightArrow ? (yardNumber + ' ▶') : ('' + yardNumber));
+                      ctx.fillText(textR, pNumR.x, pNumR.y);
+                    }
+                  }
+                }
+              }
+            } else {
+              // Individual yard tick marks (hashes)
+              const hashLen = YARD_LEN * 0.35;
+              const hashZ1 = worldZ - hashLen * 0.5;
+              const hashZ2 = worldZ + hashLen * 0.5;
+
+              const hashPositions = [
+                -HALF_W * 0.95,
+                -HALF_W * 0.22,
+                HALF_W * 0.22,
+                HALF_W * 0.95
+              ];
+
+              ctx.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * 0.55) + ')';
+              ctx.lineWidth = Math.max(1.2 * scale, 0.6);
+
+              for (let h = 0; h < hashPositions.length; h++) {
+                const hp1 = project(hashPositions[h], 0, hashZ1, camH, camDist, horizonX, horizonY);
+                const hp2 = project(hashPositions[h], 0, hashZ2, camH, camDist, horizonX, horizonY);
+                if (hp1 && hp2) {
+                  ctx.beginPath();
+                  ctx.moveTo(hp1.x, hp1.y);
+                  ctx.lineTo(hp2.x, hp2.y);
+                  ctx.stroke();
+                }
+              }
+            }
+
+            // Regulation Yellow Goalpost when passing endzone
+            if (yIdx % 100 === 0 && worldZ > minZ && worldZ < maxZ * 0.95) {
+              const postScale = scale;
+              const base = project(0, 0, worldZ, camH, camDist, horizonX, horizonY);
+              const crossbarMid = project(0, 130, worldZ, camH, camDist, horizonX, horizonY);
+              const crossbarL = project(-80, 130, worldZ, camH, camDist, horizonX, horizonY);
+              const crossbarR = project(80, 130, worldZ, camH, camDist, horizonX, horizonY);
+              const uprightL = project(-80, 310, worldZ, camH, camDist, horizonX, horizonY);
+              const uprightR = project(80, 310, worldZ, camH, camDist, horizonX, horizonY);
+
+              if (base && crossbarMid && crossbarL && crossbarR && uprightL && uprightR) {
+                ctx.strokeStyle = '#facc15';
+                ctx.lineWidth = Math.max(3.2 * postScale, 1.5);
+                ctx.lineCap = 'round';
+
+                ctx.beginPath();
+                ctx.moveTo(base.x, base.y);
+                ctx.lineTo(crossbarMid.x, crossbarMid.y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(crossbarL.x, crossbarL.y);
+                ctx.lineTo(crossbarR.x, crossbarR.y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(uprightL.x, uprightL.y);
+                ctx.lineTo(uprightL.x, uprightL.y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(crossbarR.x, crossbarR.y);
+                ctx.lineTo(uprightR.x, uprightR.y);
+                ctx.stroke();
+              }
+            }
+          }
+
+          // Sideline Boundaries
+          const slFarL = project(-HALF_W, 0, maxZ, camH, camDist, horizonX, horizonY);
+          const slNearL = project(-HALF_W, 0, minZ, camH, camDist, horizonX, horizonY);
+          const slFarR = project(HALF_W, 0, maxZ, camH, camDist, horizonX, horizonY);
+          const slNearR = project(HALF_W, 0, minZ, camH, camDist, horizonX, horizonY);
+
+          if (slFarL && slNearL && slFarR && slNearR) {
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.lineWidth = Math.max(3.5 * slNearL.factor, 1.8);
+            ctx.beginPath();
+            ctx.moveTo(slFarL.x, slFarL.y);
+            ctx.lineTo(slNearL.x, slNearL.y);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(slFarR.x, slFarR.y);
+            ctx.lineTo(slNearR.x, slNearR.y);
+            ctx.stroke();
+          }
+
+          // --- 3. Dynamic "1st & 10" Laser Marker Line ---
+          const laserZ = ((scrollZ * 1.25) % 450) + 160;
+          const pLaserL = project(-HALF_W, 0, laserZ, camH, camDist, horizonX, horizonY);
+          const pLaserR = project(HALF_W, 0, laserZ, camH, camDist, horizonX, horizonY);
+          if (pLaserL && pLaserR) {
+            const laserPulse = (Math.sin(time * 0.008) + 1) * 0.2 + 0.6;
+            ctx.strokeStyle = 'rgba(250, 204, 21, ' + (0.85 * laserPulse) + ')';
+            ctx.lineWidth = Math.max(3.0 * pLaserL.factor, 1.5);
+            ctx.shadowColor = '#facc15';
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.moveTo(pLaserL.x, pLaserL.y);
+            ctx.lineTo(pLaserR.x, pLaserR.y);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            if (pLaserL.factor > 0.45) {
+              ctx.font = '800 ' + Math.round(pLaserL.factor * 16) + 'px sans-serif';
+              ctx.fillStyle = '#facc15';
+              ctx.textAlign = 'right';
+              ctx.fillText('1ST & 10', pLaserL.x - 8, pLaserL.y);
+            }
+          }
+
+          // --- 4. Floating Stadium Light Motes & Sparks ---
+          for (let m = 0; m < motes.length; m++) {
+            const mote = motes[m];
+            mote.y += mote.vy;
+            mote.twinkle += 0.04;
+            if (mote.y < 0) {
+              mote.y = 190;
+              mote.x = (Math.random() - 0.5) * FIELD_WIDTH * 1.5;
+              mote.z = Math.random() * 1200 + 100;
+            }
+
+            const pMote = project(mote.x, mote.y, mote.z, camH, camDist, horizonX, horizonY);
+            if (!pMote) continue;
+
+            const alphaMod = (Math.sin(mote.twinkle) + 1) * 0.35 + 0.3;
+            const mAlpha = Math.min(mote.alpha * alphaMod * pMote.factor, 0.85);
+
+            ctx.fillStyle = 'rgba(254, 240, 138, ' + mAlpha + ')';
+            ctx.beginPath();
+            ctx.arc(pMote.x, pMote.y, Math.max(mote.radius * pMote.factor, 0.8), 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // --- 5. Flying Footballs Everywhere ---
+          for (let fIdx = footballs.length - 1; fIdx >= 0; fIdx--) {
+            const fb = footballs[fIdx];
+
+            fb.spiralPhase += fb.spiralSpeed * dt;
+
+            let screenX = 0;
+            let screenY = 0;
+            let screenScale = 1;
+            let screenAlpha = fb.alpha;
+
+            if (fb.is3D) {
+              fb.x += fb.vx * dt;
+              fb.y += fb.vy * dt;
+              fb.z += fb.vz * dt;
+
+              const proj = project(fb.x, fb.y, fb.z, camH, camDist, horizonX, horizonY);
+              if (!proj || fb.z <= 25) {
+                footballs[fIdx] = createFootball(false);
+                continue;
+              }
+
+              screenX = proj.x;
+              screenY = proj.y;
+              screenScale = proj.factor * 1.35;
+              screenAlpha = Math.min(proj.factor * 1.5, 1) * fb.alpha;
+              fb.angle += 0.015;
+            } else {
+              fb.vy += fb.gravity * dt;
+              fb.x += fb.vx * dt;
+              fb.y += fb.vy * dt;
+
+              screenX = fb.x;
+              screenY = fb.y;
+              screenScale = 1;
+
+              // Tangent flight angle follows ballistic arc
+              fb.angle = Math.atan2(fb.vy, fb.vx);
+
+              const margin = 160;
+              if (
+                fb.x < -margin ||
+                fb.x > width + margin ||
+                fb.y > height + margin * 1.5 ||
+                (fb.vy > 0 && fb.y > height + 80)
+              ) {
+                if (fb.isInteractive) {
+                  footballs.splice(fIdx, 1);
+                  continue;
+                } else {
+                  footballs[fIdx] = createFootball(false);
+                  continue;
+                }
+              }
+            }
+
+            // Update aerodynamic trail
+            fb.trail.push({ x: screenX, y: screenY });
+            if (fb.trail.length > 7) {
+              fb.trail.shift();
+            }
+
+            const currentLength = fb.size * screenScale;
+            if (currentLength > 8 && screenAlpha > 0.05) {
+              drawRealisticFootball(ctx, screenX, screenY, currentLength, fb.angle, fb.spiralPhase, screenAlpha, fb.trail);
+            }
+          }
+
+          animationFrameId = requestAnimationFrame(render);
+        }
+
+        function launchUserPass(targetX, targetY) {
+          const w = width || window.innerWidth || 1200;
+          const h = height || window.innerHeight || 800;
+
+          const tx = (targetX !== undefined) ? targetX : (Math.random() > 0.5 ? w * 0.85 : w * 0.15);
+          const ty = (targetY !== undefined) ? targetY : (h * 0.25 + Math.random() * (h * 0.35));
+
+          const startX = targetX !== undefined ? (targetX < w * 0.5 ? w * 0.1 : w * 0.9) : (w * 0.5);
+          const startY = h + 40;
+
+          const dx = tx - startX;
+          const dy = ty - startY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const speed = Math.max(560, dist * 0.95);
+
+          const angle = Math.atan2(dy, dx);
+          const vx = Math.cos(angle) * speed;
+          const vy = Math.sin(angle) * speed;
+
+          footballs.push(createFootball(false, {
+            x: startX,
+            y: startY,
+            vx: vx,
+            vy: vy,
+            gravity: 290,
+            size: 54 + Math.random() * 20,
+            spiralSpeed: 24,
+            isInteractive: true
+          }));
+
+          // Rapid companion spiral
+          if (footballs.length < 38) {
+            setTimeout(() => {
+              footballs.push(createFootball(false, {
+                x: startX + (Math.random() - 0.5) * 60,
+                y: startY,
+                vx: vx * (0.85 + Math.random() * 0.3),
+                vy: vy * (0.85 + Math.random() * 0.3),
+                gravity: 310,
+                size: 42 + Math.random() * 16,
+                spiralSpeed: 22,
+                isInteractive: true
+              }));
+            }, 120);
+          }
+        }
+
+        window.throwSpiralFootball = launchUserPass;
+
+        // Click anywhere on field/background to throw spiral pass
+        window.addEventListener('click', function(e) {
+          if (
+            e.target.closest('.photo-card') ||
+            e.target.closest('.modal-overlay') ||
+            e.target.closest('.stadium-audio-bar')
+          ) {
+            return;
+          }
+          launchUserPass(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('visibilitychange', function() {
+          if (document.hidden) {
+            isRunning = false;
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+          } else {
+            if (!isRunning) {
+              isRunning = true;
+              lastTimestamp = performance.now();
+              animationFrameId = requestAnimationFrame(render);
+            }
+          }
+        });
+
+        resize();
+        lastTimestamp = performance.now();
+        animationFrameId = requestAnimationFrame(render);
+      })();
+
+      // 2. Stadium Hype Music Controller
+      (function() {
+        const stadiumAudio = document.getElementById('stadium-audio');
+        const stadiumMusicBtn = document.getElementById('stadium-music-btn');
+        const musicPlayIcon = document.getElementById('music-play-icon');
+        const musicPauseIcon = document.getElementById('music-pause-icon');
+        const musicBtnText = document.getElementById('music-btn-text');
+        const musicWaveBars = document.getElementById('music-wave-bars');
+        const musicVolume = document.getElementById('music-volume');
+
+        let isPlaying = false;
+        let baseVolume = 0.75;
+        let audioContext = null;
+        let analyser = null;
+        let dataArray = null;
+
+        function initAudioAnalyser() {
+          if (audioContext || !stadiumAudio) return;
+          try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) {
+              audioContext = new AudioCtx();
+              const source = audioContext.createMediaElementSource(stadiumAudio);
+              analyser = audioContext.createAnalyser();
+              analyser.fftSize = 64;
+              source.connect(analyser);
+              analyser.connect(audioContext.destination);
+              dataArray = new Uint8Array(analyser.frequencyBinCount);
+              monitorAudioBeats();
+            }
+          } catch (e) {
+            // Audio analyser fallback
+          }
+        }
+
+        function monitorAudioBeats() {
+          if (!analyser || !dataArray) return;
+          function poll() {
+            if (isPlaying) {
+              analyser.getByteFrequencyData(dataArray);
+              const bass = (dataArray[1] + dataArray[2] + dataArray[3]) / (3 * 255);
+              window.stadiumAudioEnergy = bass;
+            } else {
+              window.stadiumAudioEnergy = 0;
+            }
+            requestAnimationFrame(poll);
+          }
+          requestAnimationFrame(poll);
+        }
+
+        function toggleMusic(play) {
+          if (!stadiumAudio) return;
+          if (play === undefined) play = !isPlaying;
+
+          if (play) {
+            initAudioAnalyser();
+            if (audioContext && audioContext.state === 'suspended') {
+              audioContext.resume();
+            }
+            stadiumAudio.volume = baseVolume;
+            const promise = stadiumAudio.play();
+            if (promise !== undefined) {
+              promise.then(() => {
+                isPlaying = true;
+                if (stadiumMusicBtn) {
+                  stadiumMusicBtn.classList.add('playing');
+                  stadiumMusicBtn.classList.remove('pulse-cue');
+                }
+                if (musicPlayIcon) musicPlayIcon.style.display = 'none';
+                if (musicPauseIcon) musicPauseIcon.style.display = 'block';
+                if (musicBtnText) musicBtnText.textContent = 'Playing Anthem';
+                if (musicWaveBars) musicWaveBars.classList.add('active');
+              }).catch(err => {
+                console.warn('Autoplay prevented:', err);
+                isPlaying = false;
+              });
+            }
+          } else {
+            stadiumAudio.pause();
+            isPlaying = false;
+            window.stadiumAudioEnergy = 0;
+            if (stadiumMusicBtn) stadiumMusicBtn.classList.remove('playing');
+            if (musicPlayIcon) musicPlayIcon.style.display = 'block';
+            if (musicPauseIcon) musicPauseIcon.style.display = 'none';
+            if (musicBtnText) musicBtnText.textContent = 'Touchdown Anthem';
+            if (musicWaveBars) musicWaveBars.classList.remove('active');
+          }
+        }
+
+        if (stadiumMusicBtn) {
+          stadiumMusicBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMusic();
+          });
+        }
+
+        const throwBallBtn = document.getElementById('throw-football-btn');
+        if (throwBallBtn) {
+          throwBallBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (window.throwSpiralFootball) {
+              window.throwSpiralFootball();
+            }
+          });
+        }
+
+        if (musicVolume) {
+          musicVolume.addEventListener('input', function() {
+            baseVolume = parseFloat(musicVolume.value);
+            if (stadiumAudio) stadiumAudio.volume = baseVolume;
+          });
+        }
+
+        // On first user interaction, prompt or trigger audio seamlessly
+        function handleFirstUserTouch() {
+          if (!isPlaying) {
+            toggleMusic(true);
+          }
+          window.removeEventListener('click', handleFirstUserTouch);
+          window.removeEventListener('keydown', handleFirstUserTouch);
+        }
+        window.addEventListener('click', handleFirstUserTouch, { once: true });
+        window.addEventListener('keydown', handleFirstUserTouch, { once: true });
+      })();
+    </script>
+
+    <!-- Modal and Gallery Interaction Script -->
+    <script>
+      (function() {
+        const cards = Array.from(document.querySelectorAll('.photo-card'));
+        const modal = document.getElementById('photo-modal');
+        const modalCard = document.getElementById('modal-card');
+        const modalImg = document.getElementById('modal-img');
+        const modalEmptyState = document.getElementById('modal-empty-state');
+        const modalTitle = document.getElementById('modal-title');
+        const modalCounter = document.getElementById('modal-counter');
+        const closeBtn = document.getElementById('modal-close-btn');
+        const dismissBtn = document.getElementById('modal-dismiss-btn');
+        const prevBtn = document.getElementById('modal-prev-btn');
+        const nextBtn = document.getElementById('modal-next-btn');
+
+        let currentIndex = 0;
+        let lastFocusedElement = null;
+
+        function showPhoto(index) {
+          if (index < 0) index = cards.length - 1;
+          if (index >= cards.length) index = 0;
+          currentIndex = index;
+
+          const card = cards[currentIndex];
+          const title = card.getAttribute('data-title') || '';
+          const src = card.getAttribute('data-src') || '';
+
+          if (src) {
+            modalImg.src = src;
+            modalImg.alt = title;
+            modalImg.style.display = 'block';
+            modalEmptyState.style.display = 'none';
+          } else {
+            modalImg.src = '';
+            modalImg.alt = '';
+            modalImg.style.display = 'none';
+            modalEmptyState.style.display = 'flex';
+          }
+
+          modalTitle.textContent = title;
+          modalCounter.textContent = 'Photo ' + (currentIndex + 1) + ' of ' + cards.length;
+        }
+
+        function openModal(index) {
+          lastFocusedElement = document.activeElement;
+          showPhoto(index);
+          modal.classList.add('open');
+          modal.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+          closeBtn.focus();
+        }
+
+        function closeModal() {
+          modal.classList.remove('open');
+          modal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+            lastFocusedElement.focus();
+          }
+        }
+
+        cards.forEach((card, idx) => {
+          card.addEventListener('click', function() {
+            openModal(idx);
+          });
+
+          card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openModal(idx);
+            }
+          });
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        dismissBtn.addEventListener('click', closeModal);
+
+        prevBtn.addEventListener('click', function() {
+          showPhoto(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener('click', function() {
+          showPhoto(currentIndex + 1);
+        });
+
+        // Click outside the modal card to close
+        modal.addEventListener('click', function(e) {
+          if (!modalCard.contains(e.target)) {
+            closeModal();
+          }
+        });
+
+        // Keyboard navigation
+        window.addEventListener('keydown', function(e) {
+          if (!modal.classList.contains('open')) return;
+
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeModal();
+          } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            showPhoto(currentIndex - 1);
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            showPhoto(currentIndex + 1);
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

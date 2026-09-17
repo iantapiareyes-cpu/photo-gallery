@@ -1,6 +1,6 @@
 {
   "name": "Photo Gallery",
-  "description": "A 9-photo grid arranged in 3 rows and 3 columns with equal dimensions, placeholder images, and titles.",
+  "description": "A 3x3 photo gallery featuring an animated 3D football field background with flying spiral footballs, stadium touchdown anthem music, and full-size photo viewing.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
