@@ -14,8 +14,16 @@
 
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        background-color: #020d06;
-        background: radial-gradient(ellipse at 50% 0%, #0d381e 0%, #041d0f 45%, #010a05 100%);
+        background: linear-gradient(
+          120deg,
+          #0f172a 0%,
+          #172554 28%,
+          #164e63 52%,
+          #312e81 76%,
+          #0f172a 100%
+        );
+        background-size: 300% 300%;
+        animation: background-drift 18s ease-in-out infinite;
         color: #f8fafc;
         min-height: 100vh;
         display: flex;
@@ -24,6 +32,17 @@
         padding: 2.25rem 1rem;
         position: relative;
         overflow-x: hidden;
+      }
+
+      @keyframes background-drift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+
+        50% {
+          background-position: 100% 50%;
+        }
       }
 
       .field-canvas,
@@ -35,6 +54,7 @@
         height: 100%;
         z-index: 0;
         pointer-events: none;
+        display: none;
       }
 
       .gallery-wrapper {
