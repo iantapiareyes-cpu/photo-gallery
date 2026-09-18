@@ -254,11 +254,10 @@
         height: 14px;
       }
 
-      /* 3 rows, 3 columns grid with equal dimensions */
+      /* 3 rows, 3 columns grid with balanced spacing */
       .photo-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(3, 1fr);
         gap: 1.25rem;
         width: 100%;
       }
@@ -386,18 +385,41 @@
 
       .photo-details {
         padding: 0.85rem 1rem;
-        text-align: center;
-        background-color: #0c183e;
-        border-top: 1px solid #1a2a5e;
+        text-align: left;
+        background-color: #081711;
+        border-top: 1px solid #143825;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        flex: 1;
       }
 
       .photo-title {
-        font-size: 0.925rem;
-        font-weight: 600;
-        color: #f1f5f9;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #f8fafc;
+        letter-spacing: -0.01em;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      .photo-desc {
+        font-size: 0.8rem;
+        line-height: 1.48;
+        color: #94a3b8;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: color 0.2s ease;
+      }
+
+      .photo-card:hover .photo-desc,
+      .photo-card:focus-visible .photo-desc {
+        color: #cbd5e1;
       }
 
       /* Modal Backdrop */
@@ -534,7 +556,14 @@
         font-weight: 700;
         color: #ffffff;
         letter-spacing: -0.015em;
-        margin-bottom: 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .modal-desc {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #cbd5e1;
+        margin: 0 0 1.35rem 0;
       }
 
       .modal-footer {
@@ -596,10 +625,17 @@
 
         .photo-details {
           padding: 0.5rem 0.6rem;
+          gap: 0.2rem;
         }
 
         .photo-title {
-          font-size: 0.75rem;
+          font-size: 0.78rem;
+        }
+
+        .photo-desc {
+          font-size: 0.68rem;
+          line-height: 1.35;
+          -webkit-line-clamp: 2;
         }
 
         .card-overlay-hint {
@@ -612,6 +648,12 @@
 
         .modal-title {
           font-size: 1.15rem;
+          margin-bottom: 0.35rem;
+        }
+
+        .modal-desc {
+          font-size: 0.82rem;
+          line-height: 1.5;
           margin-bottom: 1rem;
         }
 
@@ -671,7 +713,7 @@
 
       <main class="photo-grid" id="photo-grid">
         <!-- Row 1 / Col 1 -->
-        <div class="photo-card" id="photo-1" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Sports Feature photo" data-index="0" data-title="Sports Feature" data-src="./images/usa_today_10378433.jpg">
+        <div class="photo-card" id="photo-1" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Sports Feature photo" data-index="0" data-title="Sports Feature" data-src="./images/usa_today_10378433.jpg" data-desc="A high-intensity moment captured on the gridiron, showcasing the raw athleticism, concentration, and precision demanded in elite competitive football.">
           <div class="image-container">
             <img src="./images/usa_today_10378433.jpg" alt="Sports Feature" loading="lazy" />
             <span class="card-overlay-hint">
@@ -681,11 +723,12 @@
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Sports Feature</h2>
+            <p class="photo-desc">A high-intensity moment captured on the gridiron, showcasing the raw athleticism, concentration, and precision demanded in elite competitive football.</p>
           </div>
         </div>
 
         <!-- Row 1 / Col 2 -->
-        <div class="photo-card" id="photo-2" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Football Action photo" data-index="1" data-title="Football Action" data-src="./images/Shadow-Ridge-Football-Dynamic-Sports-Photos_0021.jpg">
+        <div class="photo-card" id="photo-2" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Football Action photo" data-index="1" data-title="Football Action" data-src="./images/Shadow-Ridge-Football-Dynamic-Sports-Photos_0021.jpg" data-desc="An explosive drive off the line of scrimmage as players battle in the trenches under the Friday night lights with relentless speed and determination.">
           <div class="image-container">
             <img src="./images/Shadow-Ridge-Football-Dynamic-Sports-Photos_0021.jpg" alt="Shadow Ridge Football" loading="lazy" />
             <span class="card-overlay-hint">
@@ -695,11 +738,12 @@
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Football Action</h2>
+            <p class="photo-desc">An explosive drive off the line of scrimmage as players battle in the trenches under the Friday night lights with relentless speed and determination.</p>
           </div>
         </div>
 
         <!-- Row 1 / Col 3 -->
-        <div class="photo-card" id="photo-3" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Athletic Performance photo" data-index="2" data-title="Athletic Performance" data-src="./images/top_row_3.jpg">
+        <div class="photo-card" id="photo-3" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Athletic Performance photo" data-index="2" data-title="Athletic Performance" data-src="./images/top_row_3.jpg" data-desc="Demonstrating peak physical conditioning and split-second agility, highlighting the discipline and power required to excel on game day.">
           <div class="image-container">
             <img src="./images/top_row_3.jpg" alt="Athletic Performance" loading="lazy" />
             <span class="card-overlay-hint">
@@ -709,11 +753,12 @@
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Athletic Performance</h2>
+            <p class="photo-desc">Demonstrating peak physical conditioning and split-second agility, highlighting the discipline and power required to excel on game day.</p>
           </div>
         </div>
 
         <!-- Row 2 / Col 1 (Oakland Offensive Line) -->
-        <div class="photo-card" id="photo-4" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Oakland Offensive Line photo" data-index="3" data-title="Oakland Offensive Line" data-src="./images/oakland_offensive_line.jpg">
+        <div class="photo-card" id="photo-4" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Oakland Offensive Line photo" data-index="3" data-title="Oakland Offensive Line" data-src="./images/oakland_offensive_line.jpg" data-desc="The offensive front digs in at the line of scrimmage, reading defensive schemes and establishing an impenetrable wall to protect the pocket.">
           <div class="image-container">
             <img src="./images/oakland_offensive_line.jpg" alt="Oakland offensive line - Miami Dolphins vs Oakland Raiders 2012" loading="lazy" />
             <span class="card-overlay-hint">
@@ -723,11 +768,12 @@
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Oakland Offensive Line</h2>
+            <p class="photo-desc">The offensive front digs in at the line of scrimmage, reading defensive schemes and establishing an impenetrable wall to protect the pocket.</p>
           </div>
         </div>
 
         <!-- Row 2 / Col 2 (CBS Sports Map) -->
-        <div class="photo-card" id="photo-5" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View College Football Map photo" data-index="4" data-title="College Football Map" data-src="./images/cbs_map_story.png">
+        <div class="photo-card" id="photo-5" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View College Football Map photo" data-index="4" data-title="College Football Map" data-src="./images/cbs_map_story.png" data-desc="A comprehensive nationwide geographic map illustrating major college football programs, historic conferences, and regional rivalries across the nation.">
           <div class="image-container">
             <img src="./images/cbs_map_story.png" alt="College Football Map" loading="lazy" referrerpolicy="no-referrer" />
             <span class="card-overlay-hint">
@@ -737,11 +783,12 @@
           </div>
           <div class="photo-details">
             <h2 class="photo-title">College Football Map</h2>
+            <p class="photo-desc">A comprehensive nationwide geographic map illustrating major college football programs, historic conferences, and regional rivalries across the nation.</p>
           </div>
         </div>
 
         <!-- Row 2 / Col 3 (PennLive Football Action) -->
-        <div class="photo-card" id="photo-6" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View PennLive Football Action photo" data-index="5" data-title="PennLive Football Action" data-src="./images/pennlive_football.jpg">
+        <div class="photo-card" id="photo-6" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View PennLive Football Action photo" data-index="5" data-title="PennLive Football Action" data-src="./images/pennlive_football.jpg" data-desc="Dynamic sideline coverage capturing a pivotal fourth-down tackle, highlighting the intense collisions and dramatic momentum shifts in competitive football.">
           <div class="image-container">
             <img src="./images/pennlive_football.jpg" alt="PennLive Football Action" loading="lazy" />
             <span class="card-overlay-hint">
@@ -751,25 +798,27 @@
           </div>
           <div class="photo-details">
             <h2 class="photo-title">PennLive Football Action</h2>
+            <p class="photo-desc">Dynamic sideline coverage capturing a pivotal fourth-down tackle, highlighting the intense collisions and dramatic momentum shifts in competitive football.</p>
           </div>
         </div>
 
-        <!-- Row 3 / Col 1 -->
-        <div class="photo-card" id="photo-7" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Coastal Waves photo" data-index="6" data-title="Coastal Waves" data-src="./images/coastal_waves.jpg">
+        <!-- Row 3 / Col 1 (Bottom Far Left) -->
+        <div class="photo-card" id="photo-7" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Gridiron Intensity photo" data-index="6" data-title="Gridiron Intensity" data-src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDwguF_LgbcHPNXMnKxrrgT3t5WDThKPD16cnUnWgCS8BMKtBmYyXmDdY&s=10" data-desc="An electrifying portrait of game-day determination, capturing the laser-sharp focus, poise, and fearless grit required to lead a championship drive down the field.">
           <div class="image-container">
-            <img src="./images/coastal_waves.jpg" alt="Coastal Waves" loading="lazy" />
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDwguF_LgbcHPNXMnKxrrgT3t5WDThKPD16cnUnWgCS8BMKtBmYyXmDdY&s=10" data-fallback="./images/bottom_left_photo.jpg" onerror="this.onerror=null;this.src='./images/bottom_left_photo.jpg';" referrerpolicy="no-referrer" alt="Gridiron Intensity" loading="lazy" />
             <span class="card-overlay-hint">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
               View Photo
             </span>
           </div>
           <div class="photo-details">
-            <h2 class="photo-title">Coastal Waves</h2>
+            <h2 class="photo-title">Gridiron Intensity</h2>
+            <p class="photo-desc">An electrifying portrait of game-day determination, capturing the laser-sharp focus, poise, and fearless grit required to lead a championship drive down the field.</p>
           </div>
         </div>
 
         <!-- Row 3 / Col 2 -->
-        <div class="photo-card" id="photo-8" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Urban Geometry photo" data-index="7" data-title="Urban Geometry" data-src="./images/urban_geometry.jpg">
+        <div class="photo-card" id="photo-8" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Urban Geometry photo" data-index="7" data-title="Urban Geometry" data-src="./images/urban_geometry.jpg" data-desc="Crisp architectural lines and geometric shadows colliding against the skyline, capturing modern structural symmetry and urban perspective.">
           <div class="image-container">
             <img src="./images/urban_geometry.jpg" alt="Modern Architecture" loading="lazy" />
             <span class="card-overlay-hint">
@@ -779,11 +828,12 @@
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Urban Geometry</h2>
+            <p class="photo-desc">Crisp architectural lines and geometric shadows colliding against the skyline, capturing modern structural symmetry and urban perspective.</p>
           </div>
         </div>
 
         <!-- Row 3 / Col 3 -->
-        <div class="photo-card" id="photo-9" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Desert Dunes photo" data-index="8" data-title="Desert Dunes" data-src="./images/desert_dunes.jpg">
+        <div class="photo-card" id="photo-9" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View Desert Dunes photo" data-index="8" data-title="Desert Dunes" data-src="./images/desert_dunes.jpg" data-desc="Sweeping golden sand ridges sculpted by whispering desert winds, creating a serene expanse of rolling dunes beneath the open sky.">
           <div class="image-container">
             <img src="./images/desert_dunes.jpg" alt="Golden Desert Dunes" loading="lazy" />
             <span class="card-overlay-hint">
@@ -793,6 +843,7 @@
           </div>
           <div class="photo-details">
             <h2 class="photo-title">Desert Dunes</h2>
+            <p class="photo-desc">Sweeping golden sand ridges sculpted by whispering desert winds, creating a serene expanse of rolling dunes beneath the open sky.</p>
           </div>
         </div>
       </main>
@@ -818,6 +869,7 @@
             <span id="modal-counter" class="modal-counter">Photo 1 of 9</span>
           </div>
           <h2 id="modal-title" class="modal-title"></h2>
+          <p id="modal-desc" class="modal-desc"></p>
           <div class="modal-footer">
             <div class="modal-nav-group">
               <button type="button" class="btn btn-nav" id="modal-prev-btn" aria-label="Previous photo">&larr; Previous</button>
@@ -1820,6 +1872,7 @@
         const modalImg = document.getElementById('modal-img');
         const modalEmptyState = document.getElementById('modal-empty-state');
         const modalTitle = document.getElementById('modal-title');
+        const modalDesc = document.getElementById('modal-desc');
         const modalCounter = document.getElementById('modal-counter');
         const closeBtn = document.getElementById('modal-close-btn');
         const dismissBtn = document.getElementById('modal-dismiss-btn');
@@ -1837,8 +1890,16 @@
           const card = cards[currentIndex];
           const title = card.getAttribute('data-title') || '';
           const src = card.getAttribute('data-src') || '';
+          const desc = card.getAttribute('data-desc') || (card.querySelector('.photo-desc') ? card.querySelector('.photo-desc').textContent : '');
 
           if (src) {
+            modalImg.setAttribute('referrerpolicy', 'no-referrer');
+            modalImg.onerror = function() {
+              this.onerror = null;
+              const imgElem = card.querySelector('img');
+              const fallback = imgElem ? imgElem.getAttribute('data-fallback') : '';
+              if (fallback) this.src = fallback;
+            };
             modalImg.src = src;
             modalImg.alt = title;
             modalImg.style.display = 'block';
@@ -1851,6 +1912,9 @@
           }
 
           modalTitle.textContent = title;
+          if (modalDesc) {
+            modalDesc.textContent = desc;
+          }
           modalCounter.textContent = 'Photo ' + (currentIndex + 1) + ' of ' + cards.length;
         }
 
